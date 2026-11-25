@@ -25,5 +25,89 @@ export default function App(){
 
 
   useEffect(()=>{
-  })
+    if(birdBottom > 0){
+      gameTimerId = setInterval(()=>{
+        setBirdBottom(birdBottom => birdBottom - 3)
+      }, 30)
+
+      return () => {
+        clearInterval(gameTimerId)
+      }
+    }
+  }, [birdBottom])
+
+  useEffect(()=>{
+    if(obstacleLeft > -60){
+      obstaclesTimerId = setInterval(()=>{
+        setObstacleLeft(obstacleLeft => obstacleLeft - 5)
+      }, 30)
+      return () => {
+        clearInterval(obstaclesTimerId)
+      }
+    }else{
+      setObstacleLeft(screenWidth)
+      setObstacleNegHeight(- Math.random() * 100)
+      SetScore(score + 1)
+    }
+}, [obstacleLeft])
+
+  useEffect(()=>{
+    if(obstacleLeftTwo > -60){
+      obstaclesTimerId = setInterval(()=>{
+        setObstacleLeftTwo(obstacleLeftTwo => obstacleLeftTwo - 5)
+      }, 30)
+      return () => {
+        clearInterval(obstaclesTimerId)
+      }
+    }else{
+      setObstacleLeftTwo(screenWidth)
+      setObstacleNegHeightTwo(- Math.random() * 100)
+      SetScore(score + 1)
+    }
+     
+    useEffect(()=>{
+      if(
+        (birdBottom < (obstacleNegHeight + ObstacleHeight + 30) ||
+        birdBottom > (obstacleNegHeight + ObstacleHeight + gap - 30)) &&
+        (obstacleLeft > screenWidth/2 - 30 && obstacleLeft < screenWidth/2 + 30)
+      ){
+        gameOver()
+      }
+    }, [birdBottom , obstacleNegHeight , obstacleLeft])
+
+    useEffect(()=>{
+      if(
+        (birdBottom < (obstacleNegHeightTwo + ObstacleHeight + 30) ||
+        birdBottom > (obstacleNegHeightTwo + ObstacleHeight + gap - 30)) &&
+        (obstacleLeftTwo > screenWidth/2 - 30 && obstacleLeftTwo < screenWidth/2 + 30)
+      ){
+        gameOver()
+      }
+    }, [birdBottom , obstacleNegHeightTwo , obstacleLeftTwo])
+  }
+)
+
+  const jump = () => {
+    if(!isGameOver && (birdBottom < screenHeight)){
+      setBirdBottom(birdBottom => birdBottom + 50)
+      console.log("jumped")
+    }
+  }
+
+  useEffect(()=>{
+    if (
+      ((birdBottom < (obstacleNegHeight + ObstacleHeight + 30) ||
+      birdBottom > (obstacleNegHeight + ObstacleHeight + gap - 30)) &&
+      (obstacleLeft > screenWidth/2 - 30 && obstacleLeft < screenWidth/2 + 30)
+    )
+    ||
+    ((birdBottom < (obstacleNegHeightTwo + ObstacleHeight + 30) ||
+      birdBottom > (obstacleNegHeightTwo + ObstacleHeight + gap - 30)) &&
+      (obstacleLeftTwo > screenWidth/2 - 30 && obstacleLeftTwo < screenWidth/2 + 30)
+    )
+    ){
+      gameOver()
+    }
+  }, [birdBottom , obstacleNegHeight , obstacleLeft , obstacleNegHeightTwo , obstacleLeftTwo])
+
 }
